@@ -9,6 +9,9 @@ import(
 	"time"
 	"os"
 	"runtime"
+//	"rand"
+//"crypto/md5"
+	"strconv"
 )
 
 func main(){
@@ -46,15 +49,15 @@ func main(){
 
 func pa(c chan string){
 	fmt.Println(len(c))
-	for i:=0;i<3;i++{
-		//d:=<-c
-		go geturl(string(i),c)
+	for i:=0;i<100;i++{
+		d:=<-c
+		go geturl(strconv.Itoa(i),c,d)
         }
 runtime.Gosched()
 }
 
-func geturl(d string,c chan string){
-	/*resp,err:=http.Get(d)
+func geturl(d string,c chan string,f string){
+	resp,err:=http.Get(f)
         if err!=nil{
                  fmt.Println("http get error.")
          }
@@ -64,23 +67,20 @@ func geturl(d string,c chan string){
         fmt.Println("http read error")
         }
         src:=string(body)
-       re,_:=regexp.Compile("\"(http:[\\S\\s]+?)\"")
-       all:=re.FindAllStringSubmatch(src,-1)
-       for  _,v:=range all{
-            c<-v[1]
-       }*/
+       //re,_:=regexp.Compile("\"(http:[\\S\\s]+?)\"")
+      // all:=re.FindAllStringSubmatch(src,-1)
+       
+	//  a:=[4]string{"a1","a2","a3","a4"}
        userFile:=d
        fout,err:=os.Create(userFile)
        
        if err!=nil{
 	       panic(err)
-	       return
        }
-       for i := 0; i < 10; i++ {
-fout.WriteString("Just a test!\r\n")
-fout.Write([]byte("Just a test!\r\n"))
-      fout.Close()
-}
+fout.WriteString(src)
+      
+fmt.Println(f,len(c),"\n")
+fout.Close()
 runtime.Gosched()
        }
 
